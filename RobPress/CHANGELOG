@@ -1,0 +1,18 @@
+0.6d
+Improved validation in creating posts
+Updated to latest version of FatFree
+
+0.6c
+DEBUG mode constant is defined in debug mode (check for DEBUG being set)
+Bootstrap introduced to set up logging and debug mode
+Bug fix: Crash with error on failed DB
+
+0.6b
+Security fix: Don't display peoples passwords in their profiles
+Anti-caching technology enabled
+
+0.6a
+Some bugs were introduced
+
+0.6
+Lost the tides of time

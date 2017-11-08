@@ -1,0 +1,7 @@
+robpress.tar.gz
+build.sh
+patch.sh
+tmp/*
+.git
+.gitignore
+config/db.cfg

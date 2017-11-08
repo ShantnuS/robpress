@@ -1,0 +1,10 @@
+<h2>Edit Category</h2>
+<h3><?=$category->title?></h3>
+
+<?php
+	$form = new Form(); 
+	echo $form->start(array('action' => $site['base'].'/admin/category/edit/' . $category->id));
+	echo $form->add('title',array('value' => $category->title));
+	echo $form->add('Edit',array('type' => 'submit'));
+	echo $form->end();
+?>

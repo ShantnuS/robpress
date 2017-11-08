@@ -1,0 +1,11 @@
+<h2>Edit Page</h2>
+<h3><?=$pagetitle?></h3>
+
+<?php
+$form = new Form(); 
+echo $form->start();
+echo $form->add('content',array('type' => 'wysiwyg', 'value' => h($page)));
+echo $form->add('Save Page',array('type' => 'submit'));
+echo $form->end();
+
+?>

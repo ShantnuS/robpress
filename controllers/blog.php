@@ -111,7 +111,7 @@ class Blog extends Controller {
 
 			$ids = $this->db->connection->exec(
 					"SELECT id FROM `posts` WHERE `title` LIKE ? OR `content` LIKE ?",
-					array(1 => $search, 2 => $search)
+					array(1 => "%".$search."%", 2 => "%".$search."%")
 				);
 
 			$ids = Hash::extract($ids,'{n}.id');

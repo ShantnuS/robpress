@@ -22,19 +22,21 @@ class Blog extends Controller {
 		if(empty($id)) {
 			return $f3->reroute('/');
 		}
+
 		$post = $this->Model->Posts->fetch($id);
+
 		if(empty($post)) {
 			return $f3->route('/');
+		} else {
+			$blog = $this->Model->map($post,'user_id','Users');
+			$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false,$blog);
+
+			$comments = $this->Model->Comments->fetchAll(array('blog_id' => $id));
+			$allcomments = $this->Model->map($comments,'user_id','Users');
+
+			$f3->set('comments',$allcomments);
+			$f3->set('blog',$blog);
 		}
-
-		$blog = $this->Model->map($post,'user_id','Users');
-		$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false,$blog);
-
-		$comments = $this->Model->Comments->fetchAll(array('blog_id' => $id));
-		$allcomments = $this->Model->map($comments,'user_id','Users');
-
-		$f3->set('comments',$allcomments);
-		$f3->set('blog',$blog);
 	}
 
 	public function reset($f3) {

@@ -13,7 +13,7 @@ class Page extends AdminController {
 		if($this->request->is('post')) {
 			$pagename = strtolower(str_replace(" ","_",$this->request->data['title']));
 			$this->Model->Pages->create($pagename);
-		
+
 			\StatusMessage::add('Page created succesfully','success');
 			return $f3->reroute('/admin/page/edit/' . $pagename);
 		}
@@ -30,8 +30,8 @@ class Page extends AdminController {
 			\StatusMessage::add('Page updated succesfully','success');
 			return $f3->reroute('/admin/page');
 		}
-	
-		$pagetitle = ucfirst(str_replace("_"," ",str_ireplace(".html","",$pagename)));	
+
+		$pagetitle = ucfirst(str_replace("_"," ",str_ireplace(".html","",$pagename)));
 		$page = $this->Model->Pages->fetch($pagename);
 		$f3->set('pagetitle',$pagetitle);
 		$f3->set('page',$page);
@@ -39,9 +39,9 @@ class Page extends AdminController {
 
 	public function delete($f3) {
 		$pagename = $f3->get('PARAMS.3');
-		$this->Model->Pages->delete($pagename);	
+		$this->Model->Pages->delete($pagename);
 		\StatusMessage::add('Page deleted succesfully','success');
-		return $f3->reroute('/admin/page');	
+		return $f3->reroute('/admin/page');
 	}
 
 }

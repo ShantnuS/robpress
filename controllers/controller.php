@@ -29,7 +29,7 @@ class Controller {
 		//Load settings
 		$settings = Settings::getSettings();
 		$settings['base'] = $f3->get('BASE');
-		
+
 		//Append debug mode to title
 		if($settings['debug'] == 1) { $settings['name'] .= ' (Debug Mode)'; }
 
@@ -46,11 +46,11 @@ class Controller {
 		}
 	}
 
-	public function afterRoute($f3) {	
+	public function afterRoute($f3) {
 		//Set page options
 		$f3->set('title',isset($this->title) ? $this->title : get_class($this));
 
-		//Prepare default menu	
+		//Prepare default menu
 		$f3->set('menu',$this->defaultMenu());
 
 		//Setup user
@@ -63,7 +63,7 @@ class Controller {
 		//Identify action
 		$controller = get_class($this);
 		if($f3->exists('PARAMS.action')) {
-			$action = $f3->get('PARAMS.action');	
+			$action = $f3->get('PARAMS.action');
 		} else {
 			$action = 'index';
 		}
@@ -87,7 +87,7 @@ class Controller {
 		//Extract request data
 		extract($this->request->data);
 
-		//Generate content		
+		//Generate content
 		$content = View::instance()->render("$controller/$action.htm");
 		$f3->set('content',$content);
 

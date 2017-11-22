@@ -20,7 +20,7 @@
 			$cats = $this->Model->Post_Categories->fetchAll(array('post_id' => $postid));
 			foreach($cats as $cat) {
 				$cat->erase();
-			}	
+			}
 
 			\StatusMessage::add('Post deleted succesfully','success');
 			return $f3->reroute('/admin/blog');
@@ -30,10 +30,10 @@
 			if($this->request->is('post')) {
 				$post = $this->Model->Posts;
 				extract($this->request->data);
-				$post->title = $title;
-				$post->content = $content;
-				$post->summary = $summary;
-				$post->user_id = $this->Auth->user('id');	
+				$post->title = $f3->clean($title);
+				$post->content = $f3->clean($content);
+				$post->summary = $f3->clean($summary);
+				$post->user_id = $this->Auth->user('id');
 				$post->created = $post->modified = mydate();
 
 				//Check for errors
@@ -83,13 +83,13 @@
 				$post->copyfrom('POST');
 				$post->modified = mydate();
 				$post->user_id = $this->Auth->user('id');
-				
+
 				//Determine whether to publish or draft
 				if(!isset($Publish)) {
 					$post->published = null;
 				} else {
 					$post->published = mydate($published);
-				} 
+				}
 
 				//Save changes
 				$post->save();
@@ -100,8 +100,8 @@
 				foreach($old as $oldcategory) {
 					$oldcategory->erase();
 				}
-				
-				//Now assign new categories				
+
+				//Now assign new categories
 				if(!isset($categories)) { $categories = array(); }
 				foreach($categories as $category) {
 					$link->reset();
@@ -112,13 +112,13 @@
 
 				\StatusMessage::add('Post updated succesfully','success');
 				return $f3->reroute('/admin/blog');
-			} 
-			$_POST = $post->cast();		
+			}
+			$_POST = $post->cast();
 			foreach($blog['Categories'] as $cat) {
 				if(!$cat) continue;
 				$_POST['categories'][] = $cat->id;
 			}
-	
+
 			$categories = $this->Model->Categories->fetchList();
 			$f3->set('categories',$categories);
 			$f3->set('post',$post);

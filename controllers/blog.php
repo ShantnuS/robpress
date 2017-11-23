@@ -63,9 +63,9 @@ class Blog extends Controller {
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
 
-			$comment->copyfrom('POST', function($val) use (&$f3) {
-				return array_map(function($input) use (&$f3) {
-					return $f3->scrub($input);
+			$comment->copyfrom('POST', function($val) use ($f3) {
+				return array_map(function($input) use ($f3) {
+					return $f3->clean($input);
 				}, array_intersect_key($val, array_flip(array('subject', 'message'))));
 			});
 

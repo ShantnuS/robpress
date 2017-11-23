@@ -52,12 +52,23 @@ class Blog extends Controller {
 		return $f3->reroute('/');
 	}
 
+	function clean($input) {
+		return $f3->clean($input);
+	}
+
 	public function comment($f3) {
 		$id = $f3->get('PARAMS.3');
 		$post = $this->Model->Posts->fetch($id);
+
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
-			$comment->copyfrom('POST');
+
+			$comment->copyfrom('POST', function($val) use (&$f3) {
+				return array_map(function($input) use (&$f3) {
+					return $f3->scrub($input);
+				}, array_intersect_key($val, array_flip(array('subject', 'message'))));
+			});
+
 			$comment->blog_id = $id;
 			$comment->created = mydate();
 

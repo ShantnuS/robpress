@@ -24,7 +24,7 @@ class Page extends AdminController {
 		if ($this->request->is('post')) {
 			$pages = $this->Model->Pages;
 			$pages->title = $pagename;
-			$pages->content = $this->request->data['content'];
+			$pages->content = $f3->clean($this->request->data['content']);
 			$pages->save();
 
 			\StatusMessage::add('Page updated succesfully','success');
@@ -37,6 +37,8 @@ class Page extends AdminController {
 		$f3->set('page',$page);
 	}
 
+	// TODO there's a vulnerability in here somewhere
+	// Delete by GET parameter
 	public function delete($f3) {
 		$pagename = $f3->get('PARAMS.3');
 		$this->Model->Pages->delete($pagename);

@@ -15,7 +15,7 @@ class AdminController extends \Controller {
 
 	public function beforeRoute($f3) {
 		parent::beforeRoute($f3);
-		
+
 		//Check access of user
 		$access = $this->Auth->user('level');
 

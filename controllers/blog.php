@@ -109,7 +109,7 @@ class Blog extends Controller {
 			$f3->set('search',$search);
 
 			//Get search results
-			$search = str_replace("*","%",$search); //Allow * as wildcard
+			$search = $f3->clean(str_replace("*","%",$search)); //Allow * as wildcard
 
 			$ids = $this->db->connection->exec(
 					"SELECT id FROM `posts` WHERE `title` LIKE ? OR `content` LIKE ?",

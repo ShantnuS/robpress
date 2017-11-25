@@ -19,4 +19,3 @@ if(!file_exists('config/db.cfg')) {
 }
 
 ?>
-

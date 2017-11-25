@@ -47,6 +47,9 @@ class Controller {
 		//Set page options
 		$f3->set('title',isset($this->title) ? $this->title : get_class($this));
 
+		//Set CSRF token
+		$f3->set('csrf', bin2hex(openssl_random_pseudo_bytes(32)));
+
 		//Prepare default menu
 		$f3->set('menu',$this->defaultMenu());
 

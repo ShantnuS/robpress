@@ -37,7 +37,7 @@
 			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
 			if (!empty($results)) {
 				$user = $results[0];
-				$this->setupSession($user);
+				$this->setupSession($user, $f3);
 				return $this->forceLogin($user);
 			}
 			return false;
@@ -55,7 +55,7 @@
 		}
 
 		/** Set up the session for the current user */
-		public function setupSession($user) {
+		public function setupSession($user, $f3) {
 
 			//Remove previous session
 			session_destroy();
@@ -68,6 +68,8 @@
 
 			//And begin!
 			new Session();
+
+			$f3->set('CSRF', openssl_random_pseudo_bytes(32));
 		}
 
 		/** Not used anywhere in the code, for debugging only */

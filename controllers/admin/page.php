@@ -37,13 +37,13 @@ class Page extends AdminController {
 		$f3->set('page',$page);
 	}
 
-	// TODO there's a vulnerability in here somewhere
-	// Delete by GET parameter
 	public function delete($f3) {
-		$pagename = $f3->get('PARAMS.3');
-		$this->Model->Pages->delete($pagename);
-		\StatusMessage::add('Page deleted succesfully','success');
-		return $f3->reroute('/admin/page');
+		if ($this->request->is('post')) {
+			$pagename = $f3->get('PARAMS.3');
+			$this->Model->Pages->delete($pagename);
+			\StatusMessage::add('Page deleted succesfully','success');
+			return $f3->reroute('/admin/page');
+		}
 	}
 
 }

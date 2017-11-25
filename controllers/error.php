@@ -7,8 +7,8 @@ class Error extends Controller {
 	}
 
 	public function error($f3) {
-	
-	}	
+
+	}
 
 }
 

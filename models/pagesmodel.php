@@ -37,7 +37,7 @@ class PagesModel {
 	/** Load the contents of a page */
 	public function fetch($pagename) {
 		$pagedir = getcwd() . "/pages/";
-		$file = $pagedir . $pagename;
+		$file = $pagedir . strtolower($pagename);
 		if(!file_exists($file)) {
 			$file .= ".html";
 		}

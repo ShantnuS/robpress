@@ -27,11 +27,8 @@ class Controller {
 		$this->Auth->resume();
 
 		//Load settings
-		$settings = Settings::getSettings();
+		$settings = $this->Model->Settings->fetchList(array('setting','value'));
 		$settings['base'] = $f3->get('BASE');
-
-		//Append debug mode to title
-		if($settings['debug'] == 1) { $settings['name'] .= ' (Debug Mode)'; }
 
 		$settings['path'] = $f3->get('PATH');
 		$this->Settings = $settings;
@@ -42,7 +39,7 @@ class Controller {
 
 		//Process before route code
 		if(isset($beforeCode)) {
-			Settings::process($beforeCode);
+			$f3->process($beforeCode);
 		}
 	}
 
@@ -93,7 +90,7 @@ class Controller {
 
 		//Process before route code
 		if(isset($afterCode)) {
-			Settings::process($afterCode);
+			$f3->process($afterCode);
 		}
 
 		//Render template

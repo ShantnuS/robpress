@@ -23,6 +23,13 @@ class Controller {
 	public function beforeRoute($f3) {
 		$this->request = new Request();
 
+		if ($this->request->is('post')) {
+				if ($this->request->data['value'] != $f3->get('SESSION.csrf')) {
+					\StatusMessage::add('CSRF: ' . $this->request->data['value'] . " :: " . $f3->get('SESSION.csrf'), 'danger');
+					return $f3->reroute('/');
+				}
+			}
+
 		//Check user
 		$this->Auth->resume();
 
@@ -48,7 +55,7 @@ class Controller {
 		$f3->set('title',isset($this->title) ? $this->title : get_class($this));
 
 		//Set CSRF token
-		$f3->set('csrf', bin2hex(openssl_random_pseudo_bytes(32)));
+		$f3->set('SESSION.csrf', bin2hex(openssl_random_pseudo_bytes(32)));
 
 		//Prepare default menu
 		$f3->set('menu',$this->defaultMenu());

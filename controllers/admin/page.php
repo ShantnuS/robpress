@@ -27,7 +27,7 @@ class Page extends AdminController {
 			$pages->content = $f3->clean($this->request->data['content']);
 			$pages->save();
 
-			\StatusMessage::add('Page updated succesfully','success');
+			\StatusMessage::add('Page updated succesfully' . $f3->get('SESSION.csrf'),'success');
 			return $f3->reroute('/admin/page');
 		}
 

@@ -29,7 +29,7 @@
 						<td style="font-weight: bold">
 							<? $pagename = str_ireplace(".html","",$page); ?>
 								<!-- <a href="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" style="float: right">&times;</a> -->
-								<form method="post" action="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" value="<?=$csrf?>">
+								<form method="post" action="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" value="<?=$_SESSION['csrf']?>">
 									<button type="submit" class="btn btn-danger" style="float: right;">x</button>
 								</form>
 								<a href="<?=$site['base']?>/admin/page/edit/<?=$pagename?>">

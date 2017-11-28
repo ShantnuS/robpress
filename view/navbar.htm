@@ -27,13 +27,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="<?= $site['base'] ?>/user/profile">Edit Profile</a></li>
             <li class="divider"></li>
-            <li>
-              <!-- <a href="<?= $site['base'] ?>/user/logout">Logout</a> -->
-              <form method="post" action="<?=$site['base']?>/user/logout">
-                <input type="hidden" name="csrf" value="<?=$csrf?>">
-                <button type="submit" class="btn btn-danger" style="width: 100%;">Logout</button>
-              </form>
-            </li>
+            <li><a href="<?= $site['base'] ?>/user/logout">Logout</a></li>
           </ul>
         </li>
 	<? else: ?>

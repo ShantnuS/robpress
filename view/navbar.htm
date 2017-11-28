@@ -21,13 +21,19 @@
           </ul>
 	  <ul class="nav navbar-nav navbar-right">
 
-	<?php if(is_array($user)): ?> 
+	<?php if(is_array($user)): ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $user['username'] ?> <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="<?= $site['base'] ?>/user/profile">Edit Profile</a></li>
             <li class="divider"></li>
-            <li><a href="<?= $site['base'] ?>/user/logout">Logout</a></li>
+            <li>
+              <!-- <a href="<?= $site['base'] ?>/user/logout">Logout</a> -->
+              <form method="post" action="<?=$site['base']?>/user/logout">
+                <input type="hidden" name="csrf" value="<?=$csrf?>">
+                <button type="submit" class="btn btn-danger" style="width: 100%;">Logout</button>
+              </form>
+            </li>
           </ul>
         </li>
 	<? else: ?>
@@ -38,4 +44,3 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
-

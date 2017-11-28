@@ -5,6 +5,7 @@
 
 	$form = new Form();
 	echo $form->start();
+	echo $form->add('csrf', array('type' => 'hidden',  'name' => 'csrf', 'value' => $csrf));
 	echo $form->add('username');
 	echo $form->add('displayname',array('label' => 'Display Name'));
 	echo $form->add('password',array('type' => 'password'));

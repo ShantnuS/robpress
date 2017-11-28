@@ -10,6 +10,7 @@
 		<?php
 			$form = new Form();
 			echo $form->start(array('action' => $site['base'].'/admin/page/add'));
+			echo $form->add('csrf', array('type' => 'hidden',  'name' => 'csrf', 'value' => $csrf));
 			echo $form->add('title',array('placeholder' => 'Enter Title'));
 			echo $form->add('Add Page',array('type' => 'submit'));
 			echo $form->end();
@@ -29,7 +30,8 @@
 						<td style="font-weight: bold">
 							<? $pagename = str_ireplace(".html","",$page); ?>
 								<!-- <a href="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" style="float: right">&times;</a> -->
-								<form method="post" action="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" value="<?=$_SESSION['csrf']?>">
+								<form method="post" action="<?=$site['base']?>/admin/page/delete/<?=$pagename?>">
+									<input type="hidden" name="csrf" value="<?=$csrf?>">
 									<button type="submit" class="btn btn-danger" style="float: right;">x</button>
 								</form>
 								<a href="<?=$site['base']?>/admin/page/edit/<?=$pagename?>">

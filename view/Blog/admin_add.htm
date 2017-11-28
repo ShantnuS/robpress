@@ -1,8 +1,9 @@
 <h2>Add New Blog Post</h2>
 
 <?
-	$form = new Form(); 
+	$form = new Form();
 	echo $form->start();
+	echo $form->add('csrf', array('type' => 'hidden',  'name' => 'csrf', 'value' => $csrf));
 ?>
 	<div class="row">
 	<div class="col-md-8">
@@ -13,17 +14,16 @@
 ?>
 	</div>
 	<div class="col-md-4">
-<?	
+<?
 	echo $form->add('published',array('type' => 'datetime', 'default' => date('Y-m-d H:i'), 'label' => 'Publish Date'));
 	echo $form->add('categories',array('type' => 'checkboxes', 'label' => 'Categories', 'items' => $categories));
 	echo '<hr/>';
 	echo $form->add('Save Draft',array('type' => 'submit','class' => 'btn-success'));
 	echo ' ';
 	echo $form->add('Publish',array('type' => 'submit'));
-?>	
+?>
 	</div>
 	</div>
-<?php	
+<?php
 echo $form->end();
 ?>
-

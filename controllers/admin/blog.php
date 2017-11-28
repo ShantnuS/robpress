@@ -14,16 +14,18 @@
 		public function delete($f3) {
 			$postid = $f3->get('PARAMS.3');
 			$post = $this->Model->Posts->fetchById($postid);
-			$post->erase();
+			if ($this->request->is('post')) {
+				$post->erase();
 
-			//Remove from categories
-			$cats = $this->Model->Post_Categories->fetchAll(array('post_id' => $postid));
-			foreach($cats as $cat) {
-				$cat->erase();
+				//Remove from categories
+				$cats = $this->Model->Post_Categories->fetchAll(array('post_id' => $postid));
+				foreach($cats as $cat) {
+					$cat->erase();
+				}
+
+				\StatusMessage::add('Post deleted succesfully','success');
+				return $f3->reroute('/admin/blog');
 			}
-
-			\StatusMessage::add('Post deleted succesfully','success');
-			return $f3->reroute('/admin/blog');
 		}
 
 		public function add($f3) {

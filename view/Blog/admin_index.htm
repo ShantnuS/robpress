@@ -13,9 +13,9 @@
 <tbody>
 <? foreach($blogs as $blog): ?>
 <? $post = $blog['Posts']; ?>
-<? 
+<?
 if(!empty($blog['Users'])) {
-	$author = $blog['Users']; 
+	$author = $blog['Users'];
 } else {
 	$author = new stdClass();
 	$author->displayname = 'Guest';
@@ -26,7 +26,11 @@ if(!empty($blog['Users'])) {
 
 <tr>
 <td style="font-weight: bold">
-<a style="float: right" href="<?=$site['base']?>/admin/blog/delete/<?=$post['id']?>">&times;</a>
+<!-- <a style="float: right" href="<?=$site['base']?>/admin/blog/delete/<?=$post['id']?>">&times;</a> -->
+<form method="post" action="<?=$site['base']?>/admin/blog/delete/<?=$post['id']?>">
+	<input type="hidden" name="csrf" value="<?=$csrf?>">
+	<button type="submit" class="btn btn-danger" style="float: right;">x</button>
+</form>
 <a href="<?=$site['base']?>/admin/blog/edit/<?=$post['id']?>"><?=$post['title']?></a>
 </td>
 <td><?=$author->username?></td>

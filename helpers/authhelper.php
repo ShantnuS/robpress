@@ -55,7 +55,7 @@
 		}
 
 		/** Set up the session for the current user */
-		public function setupSession($user, $f3) {
+		public function setupSession($user) {
 
 			//Remove previous session
 			session_destroy();
@@ -68,8 +68,6 @@
 
 			//And begin!
 			new Session();
-
-			$f3->set('CSRF', openssl_random_pseudo_bytes(32));
 		}
 
 		/** Not used anywhere in the code, for debugging only */

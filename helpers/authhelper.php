@@ -32,13 +32,35 @@
 
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
-			$f3=Base::instance();
-			$db = $this->controller->db;
-			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
-			if (!empty($results)) {
-				$user = $results[0];
-				$this->setupSession($user, $f3);
-				return $this->forceLogin($user);
+			$captcha_private_key = "6LeQ4zoUAAAAANM9z4sMLfPUxHdPRvSGRY7sCLbE";
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, [
+					'secret' => $captcha_private_key,
+					'response' => $_POST['g-recaptcha-response'],
+					'remoteip' => $_SERVER['REMOTE_ADDR']
+			]);
+
+			$resp = json_decode(curl_exec($ch));
+			curl_close($ch);
+
+			if ($resp->success) {
+				// Success
+				$f3=Base::instance();
+				$db = $this->controller->db;
+				$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'"); //TODO SQL Injection
+				if (!empty($results)) {
+					$user = $results[0];
+					$this->setupSession($user, $f3);
+					return $this->forceLogin($user);
+				}
+			} else {
+				//Failure
+				\StatusMessage::add('Login failed', 'danger');
+				return false;
 			}
 			return false;
 		}

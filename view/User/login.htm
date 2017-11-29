@@ -8,8 +8,11 @@
 	echo $form->start();
 	echo $form->add('csrf', array('type' => 'hidden',  'name' => 'csrf', 'value' => $csrf));
 	echo $form->add('username');
-	echo $form->add('password',array('type' => 'password','value' => ''));
-	echo $form->add('Login',array('type' => 'submit'));
+	echo $form->add('password',array('type' => 'password','value' => '')); ?>
+
+	<div class="g-recaptcha" data-sitekey="6LeQ4zoUAAAAAKfqOp89FhIM-qJJkNtx0oi7e0sl"></div>
+
+	<? echo $form->add('Login',array('type' => 'submit'));
 	echo $form->end();
 ?>
 

@@ -37,11 +37,13 @@ class PagesModel {
 	/** Load the contents of a page */
 	public function fetch($pagename) {
 		$pagedir = getcwd() . "/pages/";
-		$file = $pagedir . $pagename;
+		$file = $pagedir . strtolower($pagename);
 		if(!file_exists($file)) {
 			$file .= ".html";
 		}
-		if(!file_exists($file)) { return false; }
+		if(!file_exists($file)) {
+			return false;
+		}
 		return file_get_contents($file);
 	}
 
@@ -53,7 +55,7 @@ class PagesModel {
 			$file .= ".html";
 		}
 		if(!file_exists($file)) { return false; }
-		if(!isset($this->content)) { return false; } 
+		if(!isset($this->content)) { return false; }
 		return file_put_contents($file,$this->content);
 	}
 

@@ -1,5 +1,0 @@
-[globals]
-db[server]=localhost
-db[username]=USERNAME
-db[password]="PASSWORD"
-db[name]=USERNAME

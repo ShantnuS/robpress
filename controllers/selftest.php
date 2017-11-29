@@ -234,6 +234,19 @@ class Selftest extends Controller {
 			$fail = 1;	
 		}
 
+		//Check changing password
+		$user = $this->Model->Users->fetch(array('username' => $this->testUsername2));
+		$user->password = '';
+		$user->save();
+		$oldpassword = $user->password;
+		$user->setPassword($this->testPassword);
+		$newpassword = $user->password;
+		$user->save();
+		if(empty($newpassword) || $newpassword == $oldpassword) {
+			$this->errors[2] = 'The setPassword function to change a users password did not work correctly';
+			$fail = 1;
+		}
+
 		//Check login function
 		$result = $this->Auth->login($this->testUsername2,$this->testPassword);
 		if(!$result) {
@@ -267,10 +280,19 @@ class Selftest extends Controller {
 	public function test_3() {
 		$output = $this->mock->run('User/logout');
 		$fail = 0;
-		if(!preg_match("!Logged out succesfully!",$output)) {
-			$this->errors[3] .= 'The logout function did not work correctly. ';
-			$fail = 1;
-		}
+		if(preg_match("!Logged out succesfully!",$output)) {
+			return !$fail;
+		} 
+		
+		//Check for CSRF protection
+		$form = $this->mock->get_form($output);
+		$output = $this->mock->run('/User/logout',$form);
+		if(preg_match("!Logged out succesfully!",$output)) {
+			return !$fail;
+		} 
+			
+		$this->errors[3] .= 'The logout function did not work correctly. ';
+		$fail = 1;
 
 		return !$fail;
 	}

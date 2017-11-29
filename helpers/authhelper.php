@@ -9,9 +9,9 @@
 
 		/** Attempt to resume a previously logged in session if one exists */
 		public function resume() {
-			$f3=Base::instance();				
+			$f3=Base::instance();
 
-			//Ignore if already running session	
+			//Ignore if already running session
 			if($f3->exists('SESSION.user.id')) return;
 
 			//Log user back in from cookie
@@ -19,33 +19,55 @@
 				$user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
 				$this->forceLogin($user);
 			}
-		}		
+		}
 
 		/** Perform any checks before starting login */
 		public function checkLogin($username,$password,$request,$debug) {
+			$captcha_private_key = "6LeQ4zoUAAAAANM9z4sMLfPUxHdPRvSGRY7sCLbE";
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, [
+					'secret' => $captcha_private_key,
+					'response' => $_POST['g-recaptcha-response'],
+					'remoteip' => $_SERVER['REMOTE_ADDR']
+			]);
 
-			//DO NOT check login when in debug mode
-			if($debug == 1) { return true; }
+			$resp = json_decode(curl_exec($ch));
+			curl_close($ch);
 
-			return true;	
+			if ($resp->success) {
+				return true;
+			} elseif ($debug == 1) {
+				//DO NOT check login when in debug mode
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
-			$f3=Base::instance();						
-			$db = $this->controller->db;
-			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
-			if (!empty($results)) {		
-				$user = $results[0];	
-				$this->setupSession($user);
-				return $this->forceLogin($user);
-			} 
-			return false;
+				// Success
+				$f3=Base::instance();
+				$db = $this->controller->db;
+				$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'"); //TODO SQL Injection
+				if (!empty($results)) {
+					$user = $results[0];
+					$this->setupSession($user, $f3);
+					return $this->forceLogin($user);
+				}
+
+				//Failure
+				\StatusMessage::add('Login failed', 'danger');
+				return false;
 		}
 
 		/** Log user out of system */
 		public function logout() {
-			$f3=Base::instance();							
+			$f3=Base::instance();
 
 			//Kill the session
 			session_destroy();
@@ -106,13 +128,13 @@
 			}
 
 			//Log in as new user
-			return $this->forceLogin($user);			
+			return $this->forceLogin($user);
 		}
 
 		/** Force a user to log in and set up their details */
 		public function forceLogin($user) {
 			//YOU ARE NOT ALLOWED TO CHANGE THIS FUNCTION
-			$f3=Base::instance();					
+			$f3=Base::instance();
 
 			if(is_object($user)) { $user = $user->cast(); }
 

@@ -22,19 +22,21 @@ class Blog extends Controller {
 		if(empty($id)) {
 			return $f3->reroute('/');
 		}
+
 		$post = $this->Model->Posts->fetch($id);
+
 		if(empty($post)) {
 			return $f3->route('/');
+		} else {
+			$blog = $this->Model->map($post,'user_id','Users');
+			$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false,$blog);
+
+			$comments = $this->Model->Comments->fetchAll(array('blog_id' => $id));
+			$allcomments = $this->Model->map($comments,'user_id','Users');
+
+			$f3->set('comments',$allcomments);
+			$f3->set('blog',$blog);
 		}
-
-		$blog = $this->Model->map($post,'user_id','Users');
-		$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false,$blog);
-
-		$comments = $this->Model->Comments->fetchAll(array('blog_id' => $id));
-		$allcomments = $this->Model->map($comments,'user_id','Users');
-
-		$f3->set('comments',$allcomments);
-		$f3->set('blog',$blog);
 	}
 
 	public function reset($f3) {
@@ -50,12 +52,23 @@ class Blog extends Controller {
 		return $f3->reroute('/');
 	}
 
+	function clean($input) {
+		return $f3->clean($input);
+	}
+
 	public function comment($f3) {
 		$id = $f3->get('PARAMS.3');
 		$post = $this->Model->Posts->fetch($id);
+
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
-			$comment->copyfrom('POST');
+
+			$comment->copyfrom('POST', function($val) use ($f3) {
+				return array_map(function($input) use ($f3) {
+					return $f3->clean($input);
+				}, array_intersect_key($val, array_flip(array('subject', 'message'))));
+			});
+
 			$comment->blog_id = $id;
 			$comment->created = mydate();
 
@@ -107,11 +120,11 @@ class Blog extends Controller {
 			$f3->set('search',$search);
 
 			//Get search results
-			$search = str_replace("*","%",$search); //Allow * as wildcard
+			$search = $f3->clean(str_replace("*","%",$search)); //Allow * as wildcard
 
 			$ids = $this->db->connection->exec(
 					"SELECT id FROM `posts` WHERE `title` LIKE ? OR `content` LIKE ?",
-					array(1 => $search, 2 => $search)
+					array(1 => "%".$search."%", 2 => "%".$search."%")
 				);
 
 			$ids = Hash::extract($ids,'{n}.id');

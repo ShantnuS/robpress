@@ -154,6 +154,46 @@ class Mock {
 		return $output; 
 	}
 
+	//Get a form
+	public function get_form($subject) {
+		$form = [];
+
+		if(!preg_match('/<form/si',$subject)) {
+			return false;
+		}
+
+		$lsubject = preg_replace('/^.*(<form[^>]*name=[\'"])('.$form_name.')([\'"])/si', '\1\2\3', $subject);
+		$lsubject = preg_replace('/<\/form.*$/si', '', $lsubject);
+		$lsubject = preg_replace('/^.*<form/si','<form',$lsubject);
+
+		preg_match("/<form([^>]*)>/",$lsubject,$matches);
+		$formdata = $matches[1];
+		preg_match('/action=[\'"]([^\'"]*)[\'"]/',$formdata,$matches);
+		$forminfo = $matches;
+		$form['_action'] = $matches[1];
+
+		$lsubject = preg_replace('/^.*<form[^>]*>/si','',$lsubject);
+		preg_match_all('/<input[^>]*name[ ]*=[ ]*[\'"]([^\'"]*)[\'"][^>]*[ ]*value[ ]*=[ ]*[\'"]([^\'"]*)[\'"]/sim', $lsubject, $result, PREG_PATTERN_ORDER);
+		for ($i = 0; $i < count($result[0]); $i++) {
+			$name = $result[1][$i];
+			$value = $result[2][$i];
+			$form[$name] = $value;
+		}
+		preg_match_all('/<input[^>]*value=[\'"]([^\'"]*)[\'"][^>]*name=[\'"]([^\'"]*)[\'"]/sim', $lsubject, $result, PREG_PATTERN_ORDER);
+		for ($i = 0; $i < count($result[0]); $i++) {
+			$name = $result[1][$i];
+			$value = $result[2][$i];
+			$form[$name] = $value;
+		}
+		preg_match_all('/<textarea[^>]*name=[\'"]([^\'"]*)[\'"][^>]*>([^<]*)/sim', $lsubject, $result, PREG_PATTERN_ORDER);
+		for ($i = 0; $i < count($result[0]); $i++) {
+			$name = $result[1][$i];
+			$value = $result[2][$i];
+			$form[$name] = $value;
+		}
+		return $form;	
+	}
+
 	//Use F3 normal functions for everything else
 	public function __call($name, $arguments) {
 		return call_user_func_array(array($this->f3,$name),$arguments);

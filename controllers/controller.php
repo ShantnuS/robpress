@@ -23,15 +23,19 @@ class Controller {
 	public function beforeRoute($f3) {
 		$this->request = new Request();
 
+		if ($this->request->is('post')) {
+				if ($this->request->data['csrf'] != $f3->get('SESSION.csrf')) {
+					\StatusMessage::add('CSRF: ' . $this->request->data['csrf'] . " :: " . $f3->get('SESSION.csrf'), 'danger');
+					return $f3->reroute('/');
+				}
+			}
+
 		//Check user
 		$this->Auth->resume();
 
 		//Load settings
-		$settings = Settings::getSettings();
+		$settings = $this->Model->Settings->fetchList(array('setting','value'));
 		$settings['base'] = $f3->get('BASE');
-		
-		//Append debug mode to title
-		if($settings['debug'] == 1) { $settings['name'] .= ' (Debug Mode)'; }
 
 		$settings['path'] = $f3->get('PATH');
 		$this->Settings = $settings;
@@ -42,15 +46,20 @@ class Controller {
 
 		//Process before route code
 		if(isset($beforeCode)) {
-			Settings::process($beforeCode);
+			$f3->process($beforeCode);
 		}
 	}
 
-	public function afterRoute($f3) {	
+	public function afterRoute($f3) {
 		//Set page options
 		$f3->set('title',isset($this->title) ? $this->title : get_class($this));
 
-		//Prepare default menu	
+		//Set CSRF token
+		$random = bin2hex(openssl_random_pseudo_bytes(32));
+		$f3->set('SESSION.csrf', $random);
+		$f3->set('csrf', $random);
+
+		//Prepare default menu
 		$f3->set('menu',$this->defaultMenu());
 
 		//Setup user
@@ -63,7 +72,7 @@ class Controller {
 		//Identify action
 		$controller = get_class($this);
 		if($f3->exists('PARAMS.action')) {
-			$action = $f3->get('PARAMS.action');	
+			$action = $f3->get('PARAMS.action');
 		} else {
 			$action = 'index';
 		}
@@ -87,13 +96,13 @@ class Controller {
 		//Extract request data
 		extract($this->request->data);
 
-		//Generate content		
+		//Generate content
 		$content = View::instance()->render("$controller/$action.htm");
 		$f3->set('content',$content);
 
 		//Process before route code
 		if(isset($afterCode)) {
-			Settings::process($afterCode);
+			$f3->process($afterCode);
 		}
 
 		//Render template

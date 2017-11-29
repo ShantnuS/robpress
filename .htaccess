@@ -7,8 +7,17 @@ RewriteRule ^(.*)$ - [E=BASE:%1]
 RewriteCond %{REQUEST_URI} \.ini$
 RewriteRule \.ini$ - [R=404]
 
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule (^|/)([^/.]+)$ - [L,F]
+
 RewriteCond %{REQUEST_FILENAME} !-l
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* %{ENV:BASE}/index.php [L,QSA]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+# Deny access to certain file extensions 
+<FilesMatch "\.(?:inc|sql|bak|cfg|htaccess|log|md|swp|swo|git|bash_logout|bashrc|json|tarignore|txt|profile)$">
+Order allow,deny
+Deny from all
+</FilesMatch>

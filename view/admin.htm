@@ -14,8 +14,8 @@
 		<ul class="nav nav-sidebar">
 
 	    <? foreach($adminmenu as $id=>$item): ?>
-	    <? $class = (stripos($site['path'],$item['link']) !== false) ? 'active' : ''; ?>             	 
-	    <? if($id == 0 && ($site['path'] != '/admin')) { $class = ''; } ?> 
+	    <? $class = (stripos($site['path'],$item['link']) !== false) ? 'active' : ''; ?>
+	    <? if($id == 0 && ($site['path'] != '/admin')) { $class = ''; } ?>
             <li class="<?=$class?>"><a href="<?= $site['base'] ?>/<?= $item['link']?>"><i class="fa fa-<?=$item['icon']?> adminicon"></i> <?= $item['label']?></a></li>
 	    <? endforeach; ?>
 		</ul>

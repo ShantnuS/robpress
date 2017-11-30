@@ -32,9 +32,9 @@
 			if($this->request->is('post')) {
 				$post = $this->Model->Posts;
 				extract($this->request->data);
-				$post->title = $f3->clean($title);
-				$post->content = $f3->clean($content);
-				$post->summary = $f3->clean($summary);
+				$post->title = htmlspecialchars($title);
+				$post->content = htmlspecialchars($content);
+				$post->summary = htmlspecialchars($summary);
 				$post->user_id = $this->Auth->user('id');
 				$post->created = $post->modified = mydate();
 

@@ -53,7 +53,7 @@
 				// Success
 				$f3=Base::instance();
 				$db = $this->controller->db;
-				$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");  // TODO Fix SQL injection
+				$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?", array(1 => $username, 2 => $password));  // TODO Fix SQL injection
 				// $results = $db->exec("SELECT * FROM `users` WHERE `username` = ? AND `password` = ?", array(1 => $username, 2 => $password));
 				if (!empty($results)) {
 					$user = $results[0];

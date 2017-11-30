@@ -24,7 +24,7 @@ class Page extends AdminController {
 		if ($this->request->is('post')) {
 			$pages = $this->Model->Pages;
 			$pages->title = $pagename;
-			$pages->content = $f3->clean($this->request->data['content']);
+			$pages->content = htmlspecialchars($this->request->data['content']);
 			$pages->save();
 
 			\StatusMessage::add('Page updated succesfully' . $f3->get('SESSION.csrf'),'success');

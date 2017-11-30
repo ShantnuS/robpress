@@ -9,6 +9,7 @@
 
 	$form = new Form();
 	echo $form->start(array('type' => 'file'));
+	echo $form->add('csrf', array('type' => 'hidden',  'name' => 'csrf', 'value' => $csrf));
 	echo $form->add('displayname',array('label' => 'Display Name'));
 	echo $form->add('password',array('type' => 'password', 'label' => 'Change Password','value' => ''));
 	echo $form->add('bio',array('type' => 'wysiwyg'));
@@ -20,4 +21,3 @@
 	echo $form->end();
 
 ?>
-

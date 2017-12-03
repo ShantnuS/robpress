@@ -1,0 +1,11 @@
+--- controllers/admin/category.php	2017-11-07 00:00:03.000000000 +0000
++++ controllers/admin/category.php	2017-11-29 09:20:00.655970157 +0000
+@@ -34,7 +34,7 @@
+ 			$links = $this->Model->Post_Categories->fetchAll(array('category_id' => $categoryid));
+ 			foreach($links as $link) { $link->erase(); } 
+ 	
+-			\StatusMessage::add('Category deleted succesfully','success');
++			\StatusMessage::add('Category deleted successfully','success');
+ 			return $f3->reroute('/admin/category');
+ 		}
+ 

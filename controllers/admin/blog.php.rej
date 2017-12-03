@@ -1,0 +1,11 @@
+--- controllers/admin/blog.php	2017-11-07 00:00:03.000000000 +0000
++++ controllers/admin/blog.php	2017-11-29 09:20:00.655970157 +0000
+@@ -22,7 +22,7 @@
+ 				$cat->erase();
+ 			}	
+ 
+-			\StatusMessage::add('Post deleted succesfully','success');
++			\StatusMessage::add('Post deleted successfully','success');
+ 			return $f3->reroute('/admin/blog');
+ 		}
+ 

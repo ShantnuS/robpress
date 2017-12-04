@@ -65,7 +65,7 @@ class Blog extends Controller {
 
 			$comment->copyfrom('POST', function($val) use ($f3) {
 				return array_map(function($input) use ($f3) {
-					return htmlspecialchars($input);
+					return $f3->clean($input);
 				}, array_intersect_key($val, array_flip(array('subject', 'message'))));
 			});
 

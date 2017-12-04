@@ -2037,7 +2037,8 @@ final class Base extends Prefab implements ArrayAccess {
 		set_error_handler(
 			function($code,$text) use($fw) {
 				if ($code & error_reporting())
-					$fw->error(500,$text);
+				//	$fw->error(500,$text); //I have removed the sql stuff from the error and replaced it with a 404
+					$fw->error(404,"Page could not be found");
 			}
 		);
 		if (!isset($_SERVER['SERVER_NAME']))

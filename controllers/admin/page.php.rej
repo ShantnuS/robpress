@@ -1,0 +1,29 @@
+--- controllers/admin/page.php	2017-11-07 00:00:03.000000000 +0000
++++ controllers/admin/page.php	2017-11-29 09:20:00.655970157 +0000
+@@ -14,7 +14,7 @@
+ 			$pagename = strtolower(str_replace(" ","_",$this->request->data['title']));
+ 			$this->Model->Pages->create($pagename);
+ 		
+-			\StatusMessage::add('Page created succesfully','success');
++			\StatusMessage::add('Page created successfully','success');
+ 			return $f3->reroute('/admin/page/edit/' . $pagename);
+ 		}
+ 	}
+@@ -27,7 +27,7 @@
+ 			$pages->content = $this->request->data['content'];
+ 			$pages->save();
+ 
+-			\StatusMessage::add('Page updated succesfully','success');
++			\StatusMessage::add('Page updated successfully','success');
+ 			return $f3->reroute('/admin/page');
+ 		}
+ 	
+@@ -40,7 +40,7 @@
+ 	public function delete($f3) {
+ 		$pagename = $f3->get('PARAMS.3');
+ 		$this->Model->Pages->delete($pagename);	
+-		\StatusMessage::add('Page deleted succesfully','success');
++		\StatusMessage::add('Page deleted successfully','success');
+ 		return $f3->reroute('/admin/page');	
+ 	}
+ 

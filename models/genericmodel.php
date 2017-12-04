@@ -6,7 +6,7 @@ class GenericModel extends \DB\SQL\Mapper {
 	protected $database;
 
 	/** Set up a new SQL mapped object */
-	public function __construct($name,$db) {		
+	public function __construct($name,$db) {
 		parent::__construct($db->connection,strtolower($name));
 		$this->name = strtolower($name);
 		$this->database = $db;
@@ -17,7 +17,7 @@ class GenericModel extends \DB\SQL\Mapper {
 		$conditions = $this->prepare($conditions);
 
 		//Break out query and conditions and remember PDO is numbered from 1, not 0
-		if(!empty($conditions)) { 
+		if(!empty($conditions)) {
 			$query = $conditions[0];
 			unset($conditions[0]);
 		} else {
@@ -34,7 +34,7 @@ class GenericModel extends \DB\SQL\Mapper {
 		$f1 = $this->db->quotekey($field1);
 		$f2 = $this->db->quotekey($field2);
 
-		//Handle empty conditions	
+		//Handle empty conditions
 		if(empty($query)) { $query = "1=1"; }
 
 		$results = $this->db->exec("SELECT $f1,$f2 FROM $this->name WHERE " . $query,$conditions);
@@ -76,9 +76,9 @@ class GenericModel extends \DB\SQL\Mapper {
 				if(!empty($result[0])) { $result[0] .= $join; }
 
 				//Change from IN to single if only one element
-				if(is_array($value) && sizeof($value) == 1) { $value = array_values($value); $value = $value[0]; } 
+				if(is_array($value) && sizeof($value) == 1) { $value = array_values($value); $value = $value[0]; }
 				//Handle empty arrays
-				if(is_array($value) && empty($value)) { continue; } 					
+				if(is_array($value) && empty($value)) { continue; }
 
 				//Handle special cases
 				if(!is_array($value) && preg_match('!IS (NOT )?NULL!sim',$value)) {

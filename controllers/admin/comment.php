@@ -27,7 +27,7 @@ class Comment extends AdminController {
 			$comment->save();
 			\StatusMessage::add('Comment updated succesfully','success');
 			return $f3->reroute('/admin/comment');
-		} 
+		}
 		$_POST = $comment;
 		$f3->set('comment',$comment);
 	}

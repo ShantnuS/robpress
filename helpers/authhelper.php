@@ -53,7 +53,12 @@
 				// Success
 				$f3=Base::instance();
 				$db = $this->controller->db;
+<<<<<<< HEAD
 				$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'"); //TODO SQL Injection
+=======
+				$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?", array(1 => $username, 2 => $password));  // TODO Fix SQL injection
+				// $results = $db->exec("SELECT * FROM `users` WHERE `username` = ? AND `password` = ?", array(1 => $username, 2 => $password));
+>>>>>>> 388e73d50c474957ae1813a91694219abb568b45
 				if (!empty($results)) {
 					$user = $results[0];
 					$this->setupSession($user, $f3);

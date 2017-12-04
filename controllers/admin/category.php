@@ -17,7 +17,11 @@
 		public function add($f3) {
 			if($this->request->is('post')) {
 				$category = $this->Model->Categories;
+<<<<<<< HEAD
 				$category->title = $f3->clean($this->request->data['title']);
+=======
+				$category->title = htmlspecialchars($this->request->data['title']);
+>>>>>>> 388e73d50c474957ae1813a91694219abb568b45
 				$category->save();
 
 				\StatusMessage::add('Category added succesfully','success');

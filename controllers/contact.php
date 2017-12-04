@@ -11,7 +11,7 @@ class Contact extends Controller {
 
 			StatusMessage::add('Thank you for contacting us');
 			return $f3->reroute('/');
-		}	
+		}
 	}
 
 }

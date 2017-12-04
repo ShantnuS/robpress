@@ -12,7 +12,7 @@ class Model {
 	public function __get($name) {
 		$modelclass = $name . "Model";
 		if(class_exists($modelclass)) {
-			$this->name = new $modelclass($name,$this->db);		
+			$this->name = new $modelclass($name,$this->db);
 		} else {
 			$this->name = new GenericModel($name,$this->db);
 		}
@@ -26,7 +26,7 @@ class Model {
 		if (!is_array($objects)) {
 			//Single object
 			$object = $objects;
-			if(isset($previous)) { 
+			if(isset($previous)) {
 				$result = $previous;
 				$result[ucfirst($object->name)] = $object;
 			} else {
@@ -38,17 +38,17 @@ class Model {
 				if(sizeof($result[$link]) == 0) { $result[$model] = array(); }
 				foreach($result[$link] as $linked) {
 					if(isset($cache[$linked->$key2])) { $result[$model][] = $cache[$linked->$key2]; }
-					else { $cache[$linked->$key2] = $result[$model][] = $this->$model->fetch($linked->$key2); }					
-				}			
+					else { $cache[$linked->$key2] = $result[$model][] = $this->$model->fetch($linked->$key2); }
+				}
 			} else {
-				$result[$model] = $this->$model->fetch($object[$field]); 
+				$result[$model] = $this->$model->fetch($object[$field]);
 			}
-			return $result;	
+			return $result;
 		} else {
 			//Multiple objects
 			foreach($objects as $i=>$object) {
-				if(isset($previous[$i])) { 
-					$result = $previous[$i]; 
+				if(isset($previous[$i])) {
+					$result = $previous[$i];
 					$result[ucfirst($object->name)] = $object;
 				}
 				else { $result = array(ucfirst($object->name) => $object); }
@@ -60,11 +60,11 @@ class Model {
 					if(sizeof($result[$link]) == 0) { $result[$model] = array(); }
 					foreach($result[$link] as $linked) {
 						if(isset($cache[$linked->$key2])) { $result[$model][] = $cache[$linked->$key2]; }
-						else { $cache[$linked->$key2] = $result[$model][] = $this->$model->fetch($linked->$key2); }					
-					}			
-				} 
+						else { $cache[$linked->$key2] = $result[$model][] = $this->$model->fetch($linked->$key2); }
+					}
+				}
 				//Single
-				else if ($single) { 
+				else if ($single) {
 					if(isset($cache[$object[$field]])) { $result[$model] = $cache[$object[$field]]; }
 					else { $cache[$object[$field]] = $result[$model] = $this->$model->fetch($object[$field]); }
 				//Multiple

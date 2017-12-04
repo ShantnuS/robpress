@@ -16,8 +16,16 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* %{ENV:BASE}/index.php [L,QSA]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
+<<<<<<< HEAD
 # Deny access to certain file extensions 
 <FilesMatch "\.(?:inc|sql|bak|cfg|htaccess|log|md|swp|swo|git|bash_logout|bashrc|json|tarignore|txt|profile)$">
 Order allow,deny
 Deny from all
 </FilesMatch>
+=======
+# Deny access to certain file extensions
+<FilesMatch "\.(?:inc|sql|bak|cfg|htaccess|log|md|swp|swo|git|bash_logout|bashrc|json|tarignore|txt|profile|orig)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+>>>>>>> 388e73d50c474957ae1813a91694219abb568b45

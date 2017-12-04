@@ -88,6 +88,7 @@ class User extends Controller {
 		extract($this->request->data);
 		$u = $this->Model->Users->fetch($id);
 		$oldpass = $u->password;
+
 		if($this->request->is('post')) {
 			$u->copyfrom('POST');
 			if(empty($u->password)) { $u->password = $oldpass; }

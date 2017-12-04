@@ -8,15 +8,17 @@
 		}
 
 		/** Attempt to resume a previously logged in session if one exists */
-		public function resume() {
+		public function resume($f3) {
 			$f3=Base::instance();
 
 			//Ignore if already running session
-			if($f3->exists('SESSION.user.id')) return;
+			// if($f3->exists('SESSION.id')) return;
+			if ($f3->exists('SESSION.user.id')) return;
 
 			//Log user back in from cookie
 			if($f3->exists('COOKIE.RobPress_User')) {
 				$user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
+				// $user = $this->Controller->Model->User->fetch('SESSION.id');
 				$this->forceLogin($user);
 			}
 		}
@@ -87,7 +89,8 @@
 			session_id(md5($user['id']));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User',base64_encode(serialize($user)),time()+3600*24*30,'/');
+			setcookie('RobPress_User', base64_encode(serialize($user)), time()+3600*24*30, '/');
+			// setcookie('RobPress_User', base64_encode(array("id" => $user->id)), time()+3600*24*30, '/');
 
 			//And begin!
 			new Session();

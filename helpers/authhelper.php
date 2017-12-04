@@ -55,9 +55,12 @@
 				// Success
 				$f3=Base::instance();
 				$db = $this->controller->db;
-				$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?", array(1 => $username, 2 => $password));  // TODO Fix SQL injection
+				// $results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?", array(1 => $username, 2 => hash_hmac("sha512", $password, )));  // TODO Fix SQL injection
 				// $results = $db->exec("SELECT * FROM `users` WHERE `username` = ? AND `password` = ?", array(1 => $username, 2 => $password));
-				if (!empty($results)) {
+				$results = $db->query("SELECT * FROM `users` WHERE `username` = ?", array(1 => $username));
+
+				// Hashed passowrd check using static method from other file
+				if (!empty($results && \Hashhelper::hash_equals($results[0]['password'], hash_hmac("sha512", $password, $results[0]['salt'])))) {
 					$user = $results[0];
 					$this->setupSession($user, $f3);
 					return $this->forceLogin($user);

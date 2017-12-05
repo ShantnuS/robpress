@@ -73,11 +73,14 @@ class User extends Controller {
 				StatusMessage::add('Logged in succesfully','success');
 
 				//Redirect to where they came from
-				if(isset($_GET['from'])) {
-					$f3->reroute($_GET['from']);
-				} else {
-					$f3->reroute('/');
-				}
+				// Open redirect - removing it completely and redirecting to home page
+
+				// if(isset($_GET['from'])) {
+				// 	$f3->reroute($_GET['from']);
+				// } else {
+				// 	$f3->reroute('/');
+				// }
+				$f3->reroute('/');
 	}
 
 	public function logout($f3) {

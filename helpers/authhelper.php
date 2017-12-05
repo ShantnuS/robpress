@@ -13,13 +13,13 @@
 
 			//Ignore if already running session
 			// if($f3->exists('SESSION.id')) return;
-			if ($f3->exists('SESSION.user.id')) return;
+			if ($f3->exists('SESSION.id')) return;
 
 			//Log user back in from cookie
 			if($f3->exists('COOKIE.RobPress_User')) {
-				$user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
-				// $user = $this->Controller->Model->User->fetch('SESSION.id');
-				$this->forceLogin($user);
+				// $user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
+				$user = $this->controller->db->query("SELECT * FROM `users` WHERE `cookie` = ?", array(1 => $f3->get('COOKIE.RobPress_User')));
+				$this->forceLogin($user[0]);
 			}
 		}
 
@@ -59,7 +59,7 @@
 				// $results = $db->exec("SELECT * FROM `users` WHERE `username` = ? AND `password` = ?", array(1 => $username, 2 => $password));
 				$results = $db->query("SELECT * FROM `users` WHERE `username` = ?", array(1 => $username));
 
-				// Hashed passowrd check using static method from other file
+				// Hashed password check using static method from other file
 				if (!empty($results && \Hashhelper::hash_equals($results[0]['password'], hash_hmac("sha512", $password, $results[0]['salt'])))) {
 					$user = $results[0];
 					$this->setupSession($user, $f3);
@@ -89,10 +89,11 @@
 			session_destroy();
 
 			//Setup new session
-			session_id(md5($user['id']));
+			// session_id(md5($user['id']));
+			session_id(bin2hex(openssl_random_pseudo_bytes(32)));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User', base64_encode(serialize($user)), time()+3600*24*30, '/');
+			setcookie('RobPress_User', $user['cookie'], time()+3600*24*30, '/');
 			// setcookie('RobPress_User', base64_encode(array("id" => $user->id)), time()+3600*24*30, '/');
 
 			//And begin!

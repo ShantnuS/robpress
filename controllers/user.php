@@ -34,6 +34,7 @@ class User extends Controller {
 				}
 
 				$user->salt = bin2hex(openssl_random_pseudo_bytes(32));
+				$user->cookie = bin2hex(openssl_random_pseudo_bytes(32));
 
 				//Set the users password
 				$user->setPassword(hash_hmac("sha512", $user->password, $user->salt));

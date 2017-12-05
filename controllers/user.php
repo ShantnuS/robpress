@@ -77,7 +77,6 @@ class User extends Controller {
 
 				//Redirect to where they came from
 				// Open redirect - removing it completely and redirecting to home page
-
 				// if(isset($_GET['from'])) {
 				// 	$f3->reroute($_GET['from']);
 				// } else {
@@ -98,19 +97,48 @@ class User extends Controller {
 		extract($this->request->data);
 		$u = $this->Model->Users->fetch($id);
 		$oldpass = $u->password;
-
 		if($this->request->is('post')) {
 			$u->copyfrom('POST');
 			if(empty($u->password)) { $u->password = $oldpass; }
 
-			//Handle avatar upload
+			/*
+			//Handle avatar upload --- OLD ---
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
 				$url = File::Upload($_FILES['avatar']);
 				$u->avatar = $url;
 			} else if(isset($reset)) {
 				$u->avatar = '';
 			}
-
+			*/
+			
+			//Handle avatar upload
+			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
+				//Check if file is a gif png or jpg
+				$imgExts =  array('gif','png' ,'jpg');
+				$img = $_FILES['avatar']['name'];
+				$ext = pathinfo($img, PATHINFO_EXTENSION);
+				if(!in_array($ext,$imgExts) ) {
+					\StatusMessage::add('This is not a valid image file','danger');
+					return $f3->reroute('/user/profile');
+				}
+				else{
+					//Check the mime types of the image
+					//Only jpg png or gif is allowed
+					$imgmimes =  array('image/gif', 'image/png' ,'image/jpeg');
+					$mimeType = $_FILES['avatar']['type'];
+					if(!in_array($mimeType,$imgmimes)){
+						\StatusMessage::add('The MIME types do not match','danger');
+						return $f3->reroute('/user/profile');
+					}
+					else{
+						$url = File::Upload($_FILES['avatar']);
+						$u->avatar = $url;
+					}
+				}
+			} else if(isset($reset)) {
+				$u->avatar = '';
+			}
+			
 			$u->save();
 			\StatusMessage::add('Profile updated succesfully','success');
 			return $f3->reroute('/user/profile');

@@ -69,6 +69,8 @@ class Blog extends Controller {
 				}, array_intersect_key($val, array_flip(array('subject', 'message'))));
 			});
 
+			// Fix any user posting as any other user, do it by unique cookie instead
+			$comment->user_id = $this->db->query("SELECT `id` FROM `users` WHERE `cookie` = ?", array(1 => $f3->get('COOKIE.RobPress_User')));
 			$comment->blog_id = $id;
 			$comment->created = mydate();
 

@@ -110,7 +110,7 @@ class User extends Controller {
 				$u->avatar = '';
 			}
 			*/
-			
+
 			//Handle avatar upload
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
 				//Check if file is a gif png or jpg
@@ -138,7 +138,7 @@ class User extends Controller {
 			} else if(isset($reset)) {
 				$u->avatar = '';
 			}
-			
+
 			$u->save();
 			\StatusMessage::add('Profile updated succesfully','success');
 			return $f3->reroute('/user/profile');

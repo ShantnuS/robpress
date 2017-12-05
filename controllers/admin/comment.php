@@ -23,7 +23,9 @@ class Comment extends AdminController {
 		$id = $f3->get('PARAMS.3');
 		$comment = $this->Model->Comments->fetch($id);
 		if($this->request->is('post')) {
-			$comment->copyfrom('POST');
+			// $comment->copyfrom('POST');
+			$comment->subject = htmlspecialchars($subject);
+			$comment->message = htmlspecialchars($message);
 			$comment->save();
 			\StatusMessage::add('Comment updated succesfully','success');
 			return $f3->reroute('/admin/comment');

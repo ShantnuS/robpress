@@ -82,7 +82,10 @@
 			$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false);
 			if ($this->request->is('post')) {
 				extract($this->request->data);
-				$post->copyfrom('POST');
+				// $post->copyfrom('POST');
+				$post->title = htmlspecialchars($title);
+				$post->summary = htmlspecialchars($content);
+				$post->content = $content;
 				$post->modified = mydate();
 				$post->user_id = $this->Auth->user('id');
 

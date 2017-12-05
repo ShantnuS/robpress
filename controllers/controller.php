@@ -26,12 +26,19 @@ class Controller {
 		if ($this->request->is('post')) {
 				if ($this->request->data['csrf'] != $f3->get('SESSION.csrf')) {
 					\StatusMessage::add('CSRF: ' . $this->request->data['csrf'] . " :: " . $f3->get('SESSION.csrf'), 'danger');
+
+					$random = bin2hex(openssl_random_pseudo_bytes(32));
+					$f3->set('SESSION.csrf', $random);
+
 					return $f3->reroute('/');
 				}
 			}
 
+		//Set CSRF token
+		$f3->set('csrf', $f3->get('SESSION.csrf'));
+
 		//Check user
-		$this->Auth->resume();
+		$this->Auth->resume($f3);
 
 		//Load settings
 		$settings = $this->Model->Settings->fetchList(array('setting','value'));
@@ -54,10 +61,6 @@ class Controller {
 		//Set page options
 		$f3->set('title',isset($this->title) ? $this->title : get_class($this));
 
-		//Set CSRF token
-		$random = bin2hex(openssl_random_pseudo_bytes(32));
-		$f3->set('SESSION.csrf', $random);
-		$f3->set('csrf', $random);
 
 		//Prepare default menu
 		$f3->set('menu',$this->defaultMenu());

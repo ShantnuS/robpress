@@ -9,7 +9,7 @@ class Settings extends AdminController {
 		if($this->request->is('post')) {
 			foreach($settings as $setting) {
 				if(isset($this->request->data[$setting->setting])) {
-					$setting->value = $this->request->data[$setting->setting];
+					$setting->value = htmlspecialchars($this->request->data[$setting->setting]);
 					$setting->save();
 				} else {
 					$setting->value = 0;
@@ -27,13 +27,13 @@ class Settings extends AdminController {
 		$this->delTree($cache);
 	}
 
-	public function delTree($dir) { 
-		$files = array_diff(scandir($dir), array('.','..')); 
+	public function delTree($dir) {
+		$files = array_diff(scandir($dir), array('.','..'));
 		foreach ($files as $file) {
-			(is_dir("$dir/$file") && !is_link($dir)) ? $this->delTree("$dir/$file") : unlink("$dir/$file"); 
+			(is_dir("$dir/$file") && !is_link($dir)) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
 		}
-		return rmdir($dir); 
-	} 
+		return rmdir($dir);
+	}
 
 }
 

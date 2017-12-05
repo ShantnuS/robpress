@@ -17,13 +17,14 @@ class User extends Controller {
 		if($this->request->is('post')) {
 			extract($this->request->data);
 			$check = $this->Model->Users->fetch(array('username' => $username));
+
 			if (!empty($check)) {
 				StatusMessage::add('User already exists','danger');
 			} else if($password != $password2) {
 				StatusMessage::add('Passwords must match','danger');
 			} else {
 				$user = $this->Model->Users;
-				$user->copyfrom('POST');
+				$user->copyfrom('POST'); // This needs to be changed
 				$user->created = mydate();
 				$user->bio = '';
 				$user->level = 1;
@@ -32,8 +33,11 @@ class User extends Controller {
 					$user->displayname = $user->username;
 				}
 
+				$user->salt = bin2hex(openssl_random_pseudo_bytes(32));
+				$user->cookie = bin2hex(openssl_random_pseudo_bytes(32));
+
 				//Set the users password
-				$user->setPassword($user->password);
+				$user->setPassword(hash_hmac("sha512", $user->password, $user->salt));
 
 				$user->save();
 				StatusMessage::add('Registration complete','success');
@@ -69,11 +73,14 @@ class User extends Controller {
 				StatusMessage::add('Logged in succesfully','success');
 
 				//Redirect to where they came from
-				if(isset($_GET['from'])) {
-					$f3->reroute($_GET['from']);
-				} else {
-					$f3->reroute('/');
-				}
+				// Open redirect - removing it completely and redirecting to home page
+
+				// if(isset($_GET['from'])) {
+				// 	$f3->reroute($_GET['from']);
+				// } else {
+				// 	$f3->reroute('/');
+				// }
+				$f3->reroute('/');
 	}
 
 	public function logout($f3) {
@@ -88,6 +95,7 @@ class User extends Controller {
 		extract($this->request->data);
 		$u = $this->Model->Users->fetch($id);
 		$oldpass = $u->password;
+
 		if($this->request->is('post')) {
 			$u->copyfrom('POST');
 			if(empty($u->password)) { $u->password = $oldpass; }

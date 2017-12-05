@@ -24,7 +24,10 @@ class User extends Controller {
 				StatusMessage::add('Passwords must match','danger');
 			} else {
 				$user = $this->Model->Users;
-				$user->copyfrom('POST'); // This needs to be changed
+				// $user->copyfrom('POST'); // This needs to be changed
+				$user->username = htmlspecialchars($username);
+				$user->displayname = htmlspecialchars($displayname);
+				$user->email = htmlspecialchars($email);
 				$user->created = mydate();
 				$user->bio = '';
 				$user->level = 1;
